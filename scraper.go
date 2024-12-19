@@ -21,6 +21,7 @@ type Data []struct {
 	} `json:"country"`
 	Number string `json:"number"`
 }
+
 type Phone struct {
 	number string
 	date   time.Time
@@ -77,7 +78,8 @@ func ScrapPage(pageNumber string) []string {
 		}
 
 	})
-	url := getFilterForScraper() + "&page=" + pageNumber + "&sort=4"
+	//url := getFilterForScraper() + "&page=" + pageNumber + "&sort=4"
+	url := "https://cars.av.by/filter?place_region[0]=1006&page=" + pageNumber + "&sort=4"
 	err := c.Visit(url)
 	if err != nil {
 		log.Print(err)
@@ -93,7 +95,7 @@ func GetIds(pageNumber string) []string {
 	for _, link := range ScrapPage(pageNumber) {
 		i := len(link) - 9
 		id := link[i:]
-		//log.Print(id)
+		log.Print(id)
 		Ids = append(Ids, id)
 	}
 	return Ids
@@ -106,6 +108,7 @@ func GetNumber(id string) string {
 	//log.Print(link)
 	err := getJson(link, &data)
 	if err != nil {
+		log.Print(err)
 		log.Print("Error get phones")
 	} else {
 		phone = data[0].Number
